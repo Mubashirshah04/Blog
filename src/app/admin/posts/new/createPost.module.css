@@ -1,0 +1,652 @@
+.wpWrap {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  color: #3c434a;
+}
+
+.wpHeader {
+  margin-bottom: 20px;
+}
+
+.wpTitle {
+  font-size: 23px;
+  font-weight: 400;
+  margin: 0;
+  color: #1d2327;
+}
+
+.wpPostBody {
+  display: flex;
+  gap: 20px;
+}
+
+.wpPostContent {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.wpSidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.wpTitleWrap {
+  margin-bottom: 20px;
+  background: #fff;
+}
+
+.wpTitleInput {
+  padding: 11px 10px;
+  font-size: 1.7em;
+  line-height: 100%;
+  width: 100%;
+  border: 1px solid #8c8f94;
+  background-color: #fff;
+  color: #1d2327;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+  box-sizing: border-box;
+}
+
+.wpTitleInput:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: none;
+}
+
+.wpEditorWrap {
+  border: 1px solid #c3c4c7;
+  border-radius: 3px;
+  background: #fff;
+  margin-bottom: 20px;
+}
+
+.wpEditorTop {
+  display: flex;
+  justify-content: space-between;
+  align-items:flex-end;
+  background: #f0f0f1;
+  border-bottom: 1px solid #c3c4c7;
+  padding: 5px 5px 0 5px;
+}
+
+.wpMediaBtn {
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  color: #3c434a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  padding: 5px 10px;
+  margin-bottom: -1px;
+}
+
+.wpMediaIcon {
+  margin-right: 5px;
+}
+
+.wpEditorTabs {
+  display: flex;
+}
+
+.wpEditorTab {
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  color: #3c434a;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 5px 12px;
+  margin-left: 5px;
+  margin-bottom: -1px;
+}
+
+.wpActiveTab {
+  background: #fff;
+  border-bottom-color: #fff;
+  color: #1d2327;
+}
+
+.wpToolbar {
+  background: #f6f7f7;
+  border-bottom: 1px solid #c3c4c7;
+  padding: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.wpToolbarGroup {
+  display: flex;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 3px;
+}
+
+.wpToolbarWrap {
+  position: relative;
+  background: #f6f7f7;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.wpLinkPopup {
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  margin-top: -5px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  border-radius: 3px;
+}
+
+.wpLinkPopup::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 15px;
+  border-width: 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent #c3c4c7;
+}
+
+.wpLinkPopup::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 16px;
+  border-width: 0 5px 5px;
+  border-style: solid;
+  border-color: transparent transparent #fff;
+}
+
+.wpLinkInput {
+  border: 1px solid #8c8f94;
+  padding: 4px 8px;
+  font-size: 13px;
+  width: 250px;
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.wpLinkInput:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: none;
+}
+
+.wpLinkApplyBtn, .wpLinkSettingsBtn {
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  margin-left: 5px;
+  cursor: pointer;
+  height: 28px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3c434a;
+  border-radius: 3px;
+}
+
+.wpLinkApplyBtn:hover, .wpLinkSettingsBtn:hover {
+  background: #f0f0f1;
+  color: #2271b1;
+}
+
+.wpFormatSelect {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  font-size: 13px;
+  outline: none;
+}
+
+.wpToolBtn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid #c3c4c7;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: #3c434a;
+  outline: none;
+}
+
+.wpToolBtn:last-child {
+  border-right: none;
+}
+
+.wpToolBtn:hover {
+  background: #f0f0f1;
+}
+
+.wpContentInput {
+  width: 100%;
+  border: none;
+  padding: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 400px;
+  font-family: Consolas, Monaco, monospace;
+}
+
+.wpContentInput:focus {
+  outline: none;
+}
+
+.wpWordCount {
+  border-top: 1px solid #c3c4c7;
+  background: #f0f0f1;
+  padding: 5px 10px;
+  font-size: 12px;
+  text-align: right;
+  color: #50575e;
+}
+
+.wpMetaBox {
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wpMetaBoxTitle {
+  font-size: 14px;
+  margin: 0;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f1;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.wpMetaBoxInside {
+  padding: 12px;
+}
+
+.wpPublishActions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.wpButtonDefault {
+  background: #f6f7f7;
+  border: 1px solid #2271b1;
+  color: #2271b1;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 2.15384615;
+  min-height: 30px;
+  margin: 0;
+  padding: 0 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all .1s;
+}
+
+.wpButtonDefault:hover {
+  background: #f0f0f1;
+  color: #135e96;
+  border-color: #135e96;
+}
+
+.wpPublishStatus {
+  border-top: 1px solid #f0f0f1;
+  padding-top: 10px;
+}
+
+.wpMiscPubSection {
+  padding: 6px 0;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.wpIcon {
+  margin-right: 5px;
+  color: #8c8f94;
+}
+
+.wpEditLink {
+  margin-left: auto;
+  color: #2271b1;
+  text-decoration: none;
+}
+
+.wpPublishFooter {
+  background: #f6f7f7;
+  border-top: 1px solid #c3c4c7;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wpDeleteLink {
+  color: #d63638;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.wpDeleteLink:hover {
+  color: #d63638;
+  text-decoration: underline;
+}
+
+.wpButtonPrimary {
+  background: #2271b1;
+  border: 1px solid #2271b1;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 2.15384615;
+  min-height: 30px;
+  margin: 0;
+  padding: 0 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.wpButtonPrimary:hover {
+  background: #135e96;
+}
+
+.wpCategoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #c3c4c7;
+  padding: 8px;
+  background: #fcfcfc;
+}
+
+.wpCategoryList li {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.wpAddCatLink {
+  color: #2271b1;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.wpTagInputWrap {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.wpTagDesc {
+  color: #50575e;
+  font-size: 12px;
+  margin: 0;
+  font-style: italic;
+}
+
+.wpInput {
+  padding: 2px 8px;
+  font-size: 14px;
+  line-height: 2;
+  color: #1d2327;
+  border: 1px solid #8c8f94;
+  background-color: #fff;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.wpSetImageLink {
+  color: #2271b1;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.wpSetImageLink:hover {
+  text-decoration: underline;
+}
+
+.wpFormGroup {
+  margin-bottom: 15px;
+}
+
+.wpLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 850px) {
+  .wpPostBody {
+    flex-direction: column;
+  }
+  .wpSidebar {
+    width: 100%;
+  }
+}
+
+/* ===== WYSIWYG Visual Editor ===== */
+.wpVisualEditor {
+  min-height: 400px;
+  padding: 15px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #3c434a;
+  background: #fff;
+  outline: none;
+  font-family: Georgia, "Times New Roman", serif;
+  cursor: text;
+}
+
+.wpVisualEditor:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
+
+/* Links inside WYSIWYG */
+.wpVisualEditor a {
+  color: #2271b1;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.wpVisualEditor a:hover {
+  color: #135e96;
+}
+
+/* Headings inside editor */
+.wpVisualEditor h1 { font-size: 2em; margin: 0.5em 0; }
+.wpVisualEditor h2 { font-size: 1.6em; margin: 0.5em 0; }
+.wpVisualEditor h3 { font-size: 1.3em; margin: 0.5em 0; }
+.wpVisualEditor h4 { font-size: 1.1em; margin: 0.5em 0; }
+.wpVisualEditor ul { padding-left: 2em; list-style: disc; }
+.wpVisualEditor ol { padding-left: 2em; list-style: decimal; }
+.wpVisualEditor li { margin-bottom: 0.3em; }
+.wpVisualEditor blockquote {
+  border-left: 3px solid #c3c4c7;
+  padding-left: 1em;
+  color: #50575e;
+  margin: 1em 0;
+  font-style: italic;
+}
+.wpVisualEditor img {
+  max-width: 100%;
+  height: auto;
+}
+.wpVisualEditor hr {
+  border: none;
+  border-top: 1px solid #c3c4c7;
+  margin: 1.5em 0;
+}
+
+/* ===== Link Popup Box ===== */
+.wpLinkPopupBox {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 20px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 200;
+  border-radius: 4px;
+  width: 320px;
+  overflow: hidden;
+}
+
+.wpLinkPopupTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+  background: #f6f7f7;
+  padding: 8px 12px;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.wpLinkRow {
+  padding: 8px 12px;
+}
+
+.wpLinkLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #50575e;
+  margin-bottom: 4px;
+}
+
+.wpLinkField {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 13px;
+  border: 1px solid #8c8f94;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #3c434a;
+}
+.wpLinkField:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: none;
+}
+
+.wpLinkActions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f6f7f7;
+  border-top: 1px solid #c3c4c7;
+}
+
+/* Tags list */
+.wpTagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.wpTag {
+  background: #f0f0f1;
+  border: 1px solid #c3c4c7;
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wpTag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8c8f94;
+  font-size: 10px;
+  padding: 0;
+  line-height: 1;
+}
+
+.wpTag button:hover {
+  color: #d63638;
+}
+
+.wpSlugWrap {
+  font-size: 13px;
+  color: #50575e;
+  padding: 5px 0;
+}
+
+.wpSlug {
+  color: #2271b1;
+  font-family: monospace;
+}
+
+.wpToolBtnActive {
+  background: #e8e8e8 !important;
+}
+
+.wpNotice {
+  background: #f0f6fc;
+  border: 1px solid #72aee6;
+  color: #1d2327;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* Image Toolbar */
+.wpImageToolbar {
+  position: absolute;
+  background: #1d2327;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  z-index: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  pointer-events: auto;
+}
+
+.wpImageToolbar button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.wpImageToolbar button:hover {
+  background: #2c3338;
+  color: #72aee6;
+}
+
+.wpToolbarDivider {
+  width: 1px;
+  height: 16px;
+  background: #3c434a;
+  margin: 0 4px;
+}
+
+.wpDeleteBtn:hover {
+  color: #d63638 !important;
+}
+
