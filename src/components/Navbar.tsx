@@ -31,11 +31,20 @@ export function Navbar() {
 
       if (!data) return;
 
+      // Filter out specific categories for header
+      const filteredData = data.filter(c => {
+        const slug = c.slug.toLowerCase();
+        const name = c.name.toLowerCase();
+        return !['internet', 'gadgets'].includes(slug) && 
+               !slug.includes('upcoming') && 
+               !name.includes('upcoming');
+      });
+
       // Build parent -> children tree
-      const parents = data.filter(c => !c.parent_id);
+      const parents = filteredData.filter(c => !c.parent_id);
       const tree = parents.map(parent => ({
         ...parent,
-        subcategories: data.filter(c => c.parent_id === parent.id),
+        subcategories: filteredData.filter(c => c.parent_id === parent.id),
       }));
       setCategories(tree);
     };

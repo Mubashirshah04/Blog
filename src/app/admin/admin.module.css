@@ -568,3 +568,7 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+.wpSubCatRow {
+  background: #fcfcfc;
+}

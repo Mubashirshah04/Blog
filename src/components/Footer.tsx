@@ -1,11 +1,42 @@
+"use client";
+
 import Link from "next/link";
 import styles from "./Footer.module.css";
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
-const categories = [
-  "AI Tools", "Finance", "Crypto", "Tech News", "Mobile Apps", "Online Earning", "Cricket"
-];
+type Category = {
+  id: string;
+  name: string;
+  slug: string;
+};
 
 export function Footer() {
+  const [footerCats, setFooterCats] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCats = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("categories")
+        .select("id, name, slug")
+        .order("sort_order", { ascending: true });
+
+      if (data) {
+        // Show ONLY internet, gadgets, or upcoming in footer categories
+        const filtered = data.filter(c => {
+          const slug = c.slug.toLowerCase();
+          const name = c.name.toLowerCase();
+          return ['internet', 'gadgets'].includes(slug) || 
+                 slug.includes('upcoming') || 
+                 name.includes('upcoming');
+        });
+        setFooterCats(filtered);
+      }
+    };
+    fetchCats();
+  }, []);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -22,13 +53,20 @@ export function Footer() {
           <div className={styles.col}>
             <h3 className={styles.heading}>Categories</h3>
             <ul className={styles.list}>
-              {categories.slice(0, 4).map(cat => (
-                <li key={cat}>
-                  <Link href={`/category/${cat.toLowerCase().replace(/ /g, "-")}`} className={styles.link}>
-                    {cat}
-                  </Link>
-                </li>
-              ))}
+              {footerCats.length > 0 ? (
+                footerCats.map(cat => (
+                  <li key={cat.id}>
+                    <Link href={`/category/${cat.slug}`} className={styles.link}>
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li><Link href="/category/internet" className={styles.link}>Internet</Link></li>
+                  <li><Link href="/category/gadgets" className={styles.link}>Gadgets</Link></li>
+                </>
+              )}
             </ul>
           </div>
           

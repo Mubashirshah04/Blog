@@ -650,3 +650,43 @@
   color: #d63638 !important;
 }
 
+.wpPermalinkWrap {
+  font-size: 13px;
+  color: #646970;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 0 10px;
+}
+
+.wpSlugValue {
+  color: #2271b1;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.wpSlugValue button {
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  padding: 0 6px;
+  border-radius: 3px;
+  margin-left: 5px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.wpSlugEditBox {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.wpSlugInput {
+  border: 1px solid #8c8f94;
+  padding: 2px 8px;
+  font-size: 13px;
+  width: 250px;
+  height: 28px;
+  border-radius: 3px;
+}
+

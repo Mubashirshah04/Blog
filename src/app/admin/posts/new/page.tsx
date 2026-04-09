@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { SeoAnalyzer } from "@/components/SeoAnalyzer";
 import { AiDetector } from "@/components/AiDetector";
 import { MediaLibrary } from "@/components/MediaLibrary";
+import { marked } from "marked";
+import TurndownService from "turndown";
+
+const turndownService = new TurndownService({
+  headingStyle: "atx",
+  hr: "---",
+  bulletListMarker: "-",
+});
 
 type Category = { id: string; name: string; slug: string; parent_id: string | null };
 
@@ -13,33 +21,16 @@ function slugify(text: string) {
   return text.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^\w-]+/g, "").replace(/--+/g, "-");
 }
 
-// Convert HTML to simple markdown for storage
+// Convert HTML to markdown using Turndown
 function htmlToMarkdown(html: string): string {
-  return html
-    .replace(/<strong>(.*?)<\/strong>/gi, "**$1**")
-    .replace(/<b>(.*?)<\/b>/gi, "**$1**")
-    .replace(/<em>(.*?)<\/em>/gi, "_$1_")
-    .replace(/<i>(.*?)<\/i>/gi, "_$1_")
-    .replace(/<del>(.*?)<\/del>/gi, "~~$1~~")
-    .replace(/<s>(.*?)<\/s>/gi, "~~$1~~")
-    .replace(/<a href="(.*?)"[^>]*>(.*?)<\/a>/gi, "[$2]($1)")
-    .replace(/<h1>(.*?)<\/h1>/gi, "# $1\n\n")
-    .replace(/<h2>(.*?)<\/h2>/gi, "## $1\n\n")
-    .replace(/<h3>(.*?)<\/h3>/gi, "### $1\n\n")
-    .replace(/<blockquote(.*?)>(.*?)<\/blockquote>/gi, "> $2\n\n")
-    // Robust image matching (handles any order of src/alt and different quotes)
-    .replace(/<img[^>]+src=["']([^"']+)["'][^>]*alt=["']([^"']*)["'][^>]*>/gi, "![$2]($1)\n\n")
-    .replace(/<img[^>]+alt=["']([^"']*)["'][^>]+src=["']([^"']+)["'][^>]*>/gi, "![$1]($2)\n\n")
-    .replace(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi, "![]($1)\n\n")
-    .replace(/<p>(.*?)<\/p>/gi, "$1\n\n")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<li>(.*?)<\/li>/gi, "- $1\n")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&nbsp;/g, " ")
-    .trim();
+  if (!html) return "";
+  return turndownService.turndown(html);
+}
+
+// Convert Markdown to HTML using marked
+function markdownToHtml(md: string): string {
+  if (!md) return "";
+  return marked.parse(md) as string;
 }
 
 export default function CreatePostPage() {
@@ -71,6 +62,8 @@ export default function CreatePostPage() {
   const [wordCount, setWordCount] = useState(0);
   const [activeTab, setActiveTab] = useState<"visual" | "text">("visual");
   const [textContent, setTextContent] = useState("");
+  const [slug, setSlug] = useState("");
+  const [isEditingSlug, setIsEditingSlug] = useState(false);
   const savedSelection = useRef<Range | null>(null);
 
   useEffect(() => {
@@ -225,7 +218,7 @@ export default function CreatePostPage() {
     setNotice("");
 
     const { data: { user } } = await supabase.auth.getUser();
-    const slug = slugify(title);
+    const finalSlug = slug.trim() || slugify(title);
     const htmlContent = activeTab === "visual"
       ? (editorRef.current?.innerHTML || "")
       : textContent;
@@ -233,7 +226,7 @@ export default function CreatePostPage() {
 
     const postData = {
       title: title.trim(),
-      slug,
+      slug: finalSlug,
       content: markdownContent,
       excerpt: excerpt || (editorRef.current?.innerText || "").substring(0, 160),
       featured_image: featuredImage || null,
@@ -289,12 +282,33 @@ export default function CreatePostPage() {
               placeholder="Add title"
               className={styles.wpTitleInput}
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={e => {
+                setTitle(e.target.value);
+                if (!isEditingSlug) setSlug(slugify(e.target.value));
+              }}
             />
-            {title && (
-              <div className={styles.wpSlugWrap}>
-                Slug: <span className={styles.wpSlug}>{slugify(title)}</span>
-              </div>
+          </div>
+
+          <div className={styles.wpPermalinkWrap}>
+            <strong>Permalink:</strong> {typeof window !== 'undefined' ? window.location.origin : ''}/blog/
+            {isEditingSlug ? (
+              <span className={styles.wpSlugEditBox}>
+                <input
+                  type="text"
+                  className={styles.wpSlugInput}
+                  value={slug}
+                  onChange={e => setSlug(slugify(e.target.value))}
+                  onBlur={() => setIsEditingSlug(false)}
+                  onKeyDown={e => e.key === "Enter" && setIsEditingSlug(false)}
+                  autoFocus
+                />
+                <button type="button" className={styles.wpButton} onClick={() => setIsEditingSlug(false)}>OK</button>
+              </span>
+            ) : (
+              <span className={styles.wpSlugValue}>
+                {slug || '<em>(pending title)</em>'}
+                <button type="button" className={styles.wpButton} onClick={() => setIsEditingSlug(true)}>Edit</button>
+              </span>
             )}
           </div>
 

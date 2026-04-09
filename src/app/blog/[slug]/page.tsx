@@ -4,67 +4,19 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import { CommentForm } from "@/components/CommentForm";
 
-// Enhanced parseInline for professional look
-function parseInline(text: string) {
-  if (!text) return "";
-  return text
-    // Handle Images first: ![alt](url)
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="prose-inline-img" style="max-width:100%; border-radius:8px; margin: 20px 0; display:block;" />')
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/_(.+?)_/g, "<em>$1</em>")
-    .replace(/~~(.+?)~~/g, "<del>$1</del>")
-    .replace(/`(.+?)`/g, "<code>$1</code>")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-}
+import { marked } from "marked";
 
-// Full markdown renderer with better formatting
+// Enhanced renderer configuration
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
+
+// Full markdown renderer using marked library
 function renderContent(content: string) {
   if (!content) return null;
-  
-  return content.split("\n\n").map((block, i) => {
-    const trimmed = block.trim();
-    if (!trimmed) return null;
-
-    // Headings
-    if (trimmed.startsWith("### "))
-      return <h3 key={i} className={styles.proseH3} dangerouslySetInnerHTML={{ __html: parseInline(trimmed.replace(/^### /, "")) }} />;
-    if (trimmed.startsWith("## "))
-      return <h2 key={i} className={styles.proseH2} dangerouslySetInnerHTML={{ __html: parseInline(trimmed.replace(/^## /, "")) }} />;
-    if (trimmed.startsWith("# "))
-      return <h1 key={i} className={styles.proseH1} dangerouslySetInnerHTML={{ __html: parseInline(trimmed.replace(/^# /, "")) }} />;
-
-    // Horizontal rule
-    if (trimmed === "---") return <hr key={i} className={styles.proseHr} />;
-
-    // Blockquote
-    if (trimmed.startsWith("> "))
-      return <blockquote key={i} className={styles.proseQuote} dangerouslySetInnerHTML={{ __html: parseInline(trimmed.replace(/^>/gm, "").trim()) }} />;
-
-    // Image: ![alt](url)
-    const imgMatch = trimmed.match(/!\[([^\]]*)\]\(([^)]+)\)/);
-    if (imgMatch && (trimmed.startsWith("![") || (trimmed.includes("![") && trimmed.length < 500)))
-      return (
-        <div key={i} className={styles.proseImageContainer}>
-          <img src={imgMatch[2]} alt={imgMatch[1]} className={styles.proseImage} />
-          {imgMatch[1] && <span className={styles.imageCaption}>{imgMatch[1]}</span>}
-        </div>
-      );
-
-    // Lists
-    if (trimmed.match(/^- /m)) {
-      const lines = trimmed.split("\n").filter(l => l.startsWith("- "));
-      return (
-        <ul key={i} className={styles.proseUl}>
-          {lines.map((item, j) => (
-            <li key={j} dangerouslySetInnerHTML={{ __html: parseInline(item.replace(/^- /, "")) }} />
-          ))}
-        </ul>
-      );
-    }
-
-    // Default Paragraph
-    return <p key={i} className={styles.proseP} dangerouslySetInnerHTML={{ __html: parseInline(trimmed) }} />;
-  });
+  const html = marked.parse(content) as string;
+  return <div className="prose-content" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -79,15 +31,41 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   if (!post || error) notFound();
 
-  // Related posts for sidebar
-  const { data: related } = await supabase
-    .from("posts")
-    .select("id, title, slug, featured_image, category, created_at")
-    .eq("status", "published")
-    .neq("id", post.id)
-    .limit(5);
+  // 1. Fetch Trending Posts (Based on views in analytics)
+  const { data: trendingViews } = await supabase
+    .from("analytics")
+    .select("post_id")
+    .eq("event_type", "view");
+  
+  const viewCounts: Record<string, number> = {};
+  trendingViews?.forEach(v => {
+    if (v.post_id) viewCounts[v.post_id] = (viewCounts[v.post_id] || 0) + 1;
+  });
 
-  // Fetch approved comments
+  const { data: allPublished } = await supabase
+    .from("posts")
+    .select("id, title, slug, created_at, category")
+    .eq("status", "published")
+    .limit(50);
+  
+  const trendingPosts = (allPublished || [])
+    .map(p => ({ ...p, views: viewCounts[p.id] || 0 }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5);
+
+  // 2. Fetch categories for sidebar
+  const { data: sidebarCats } = await supabase
+    .from("categories")
+    .select("name, slug")
+    .is("parent_id", null)
+    .limit(10);
+
+  // 3. Related posts (You may also like)
+  const relatedPosts = (allPublished || [])
+    .filter(p => p.id !== post.id && p.category === post.category)
+    .slice(0, 3);
+
+  // 4. Fetch approved comments
   const { data: comments } = await supabase
     .from("comments")
     .select("*")
@@ -151,10 +129,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Comments Section */}
           <section className={styles.commentSectionWrapper}>
             <div className={styles.commentsList}>
-              {comments && comments.length > 0 && (
-                <>
-                  <h3 className={styles.commentHeading}>{comments.length} Comments</h3>
-                  {comments.map((comment) => (
+               <h3 className={styles.commentHeading}>
+                 {comments && comments.length > 0 ? `${comments.length} Comments` : "Comments"}
+               </h3>
+               
+               {comments && comments.length > 0 ? (
+                  comments.map((comment) => (
                     <div key={comment.id} className={styles.commentItem}>
                       <div className={styles.commentHeader}>
                         <div className={styles.commentAuthorAvatar}>
@@ -169,9 +149,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         {comment.content}
                       </div>
                     </div>
-                  ))}
-                </>
-              )}
+                  ))
+               ) : (
+                 <p style={{ color: "var(--text-muted)", fontStyle: "italic", marginBottom: "2rem" }}>
+                   No approved comments yet. Be the first to share your thoughts!
+                 </p>
+               )}
             </div>
             
             <CommentForm postId={post.id} />
@@ -183,7 +166,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className={styles.widget}>
             <h3 className={styles.widgetHeader}>Trending Now</h3>
             <div className={styles.trendingPosts}>
-              {(related || []).map((rp, i) => (
+              {trendingPosts.length > 0 ? trendingPosts.map((rp, i) => (
                 <Link key={rp.id} href={`/blog/${rp.slug}`} className={styles.trendingCard}>
                   <span className={styles.trendingId}>0{i + 1}</span>
                   <div className={styles.trendingDetails}>
@@ -191,7 +174,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <span>{formatDate(rp.created_at)}</span>
                   </div>
                 </Link>
-              ))}
+              )) : <p>No trending posts yet.</p>}
             </div>
           </div>
 
@@ -207,7 +190,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className={styles.widget}>
              <h3 className={styles.widgetHeader}>Categories</h3>
              <div className={styles.catGrid}>
-                {["AI Tools", "Finance", "Crypto", "Tech"].map(c => (
+                {sidebarCats && sidebarCats.length > 0 ? sidebarCats.map(c => (
+                  <Link key={c.slug} href={`/category/${c.slug}`} className={styles.catLink}>{c.name}</Link>
+                )) : ["AI Tools", "Finance", "Crypto", "Tech"].map(c => (
                   <Link key={c} href={`/category/${c.toLowerCase()}`} className={styles.catLink}>{c}</Link>
                 ))}
              </div>
@@ -221,7 +206,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
            <span>You May Also Like</span>
         </div>
         <div className={styles.recentGrid}>
-           {(related || []).slice(0, 3).map(rp => (
+           {relatedPosts.length > 0 ? relatedPosts.map(rp => (
+             <Link key={rp.id} href={`/blog/${rp.slug}`} className={styles.recentCard}>
+                <div className={styles.recentImgWrap}>
+                   <img src={rp.featured_image || DEFAULT_IMAGE} alt={rp.title} />
+                </div>
+                <div className={styles.recentContent}>
+                   <span className={styles.recentCat}>{rp.category || "General"}</span>
+                   <h4>{rp.title}</h4>
+                   <span className={styles.recentDate}>{formatDate(rp.created_at)}</span>
+                </div>
+             </Link>
+           )) : (allPublished || []).slice(0, 3).map(rp => (
              <Link key={rp.id} href={`/blog/${rp.slug}`} className={styles.recentCard}>
                 <div className={styles.recentImgWrap}>
                    <img src={rp.featured_image || DEFAULT_IMAGE} alt={rp.title} />

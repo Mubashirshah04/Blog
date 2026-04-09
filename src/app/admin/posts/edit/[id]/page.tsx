@@ -6,6 +6,14 @@ import { useRouter, useParams } from "next/navigation";
 import { SeoAnalyzer } from "@/components/SeoAnalyzer";
 import { AiDetector } from "@/components/AiDetector";
 import { MediaLibrary } from "@/components/MediaLibrary";
+import { marked } from "marked";
+import TurndownService from "turndown";
+
+const turndownService = new TurndownService({
+  headingStyle: "atx",
+  hr: "---",
+  bulletListMarker: "-",
+});
 
 type Category = { id: string; name: string; slug: string; parent_id: string | null };
 
@@ -13,52 +21,16 @@ function slugify(text: string) {
   return text.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^\w-]+/g, "").replace(/--+/g, "-");
 }
 
-// Convert HTML to simple markdown for storage
+// Convert HTML to markdown using Turndown for robustness
 function htmlToMarkdown(html: string): string {
-  return html
-    .replace(/<strong>(.*?)<\/strong>/gi, "**$1**")
-    .replace(/<b>(.*?)<\/b>/gi, "**$1**")
-    .replace(/<em>(.*?)<\/em>/gi, "_$1_")
-    .replace(/<i>(.*?)<\/i>/gi, "_$1_")
-    .replace(/<del>(.*?)<\/del>/gi, "~~$1~~")
-    .replace(/<s>(.*?)<\/s>/gi, "~~$1~~")
-    .replace(/<a href="(.*?)"[^>]*>(.*?)<\/a>/gi, "[$2]($1)")
-    .replace(/<h1>(.*?)<\/h1>/gi, "# $1\n\n")
-    .replace(/<h2>(.*?)<\/h2>/gi, "## $1\n\n")
-    .replace(/<h3>(.*?)<\/h3>/gi, "### $1\n\n")
-    .replace(/<blockquote(.*?)>(.*?)<\/blockquote>/gi, "> $2\n\n")
-    // Very robust image matching
-    .replace(/<img[^>]+src=["']([^"']+)["'][^>]+alt=["']([^"']*)["'][^>]*>/gi, "![$2]($1)\n\n")
-    .replace(/<img[^>]+alt=["']([^"']*)["'][^>]+src=["']([^"']+)["'][^>]*>/gi, "![$1]($2)\n\n")
-    .replace(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi, "![]($1)\n\n")
-    .replace(/<p>(.*?)<\/p>/gi, "$1\n\n")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<li>(.*?)<\/li>/gi, "- $1\n")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&nbsp;/g, " ")
-    .trim();
+  if (!html) return "";
+  return turndownService.turndown(html);
 }
 
-// Convert Markdown to simple HTML for editor
+// Convert Markdown to HTML using marked for editor
 function markdownToHtml(md: string): string {
   if (!md) return "";
-  return md
-    // Process images first, carefully
-    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="wp-editor-image" style="max-width:100%; height:auto; border-radius:8px; margin: 20px 0; display:block;" />')
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    .replace(/_(.*?)_/g, "<em>$1</em>")
-    .replace(/~~(.*?)~~/g, "<del>$1</del>")
-    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    .replace(/^# (.*?)$/gm, "<h1>$1</h1>")
-    .replace(/^## (.*?)$/gm, "<h2>$1</h2>")
-    .replace(/^### (.*?)$/gm, "<h3>$1</h3>")
-    .replace(/^> (.*?)$/gm, "<blockquote>$1</blockquote>")
-    .replace(/^- (.*?)$/gm, "<li>$1</li>")
-    .replace(/\n\n/g, "</p><p>")
-    .replace(/\n/g, "<br/>");
+  return marked.parse(md) as string;
 }
 
 export default function EditPostPage() {
@@ -94,6 +66,8 @@ export default function EditPostPage() {
   const [activeTab, setActiveTab] = useState<"visual" | "text">("visual");
   const [textContent, setTextContent] = useState("");
   const [postStatus, setPostStatus] = useState<"draft" | "published">("draft");
+  const [slug, setSlug] = useState("");
+  const [isEditingSlug, setIsEditingSlug] = useState(false);
   const savedSelection = useRef<Range | null>(null);
 
   useEffect(() => {
@@ -127,6 +101,7 @@ export default function EditPostPage() {
       setSeoTitle(post.seo_title || "");
       setMetaDesc(post.meta_description || "");
       setPostStatus(post.status);
+      setSlug(post.slug);
       
       const html = markdownToHtml(post.content);
       setEditorHtml(html);
@@ -294,6 +269,7 @@ export default function EditPostPage() {
       focus_keyword: focusKeyword,
       seo_title: seoTitle,
       meta_description: metaDesc,
+      slug: slug.trim() || slugify(title),
       updated_at: new Date().toISOString(),
     };
 
@@ -360,6 +336,29 @@ export default function EditPostPage() {
               value={title}
               onChange={e => setTitle(e.target.value)}
             />
+          </div>
+
+          <div className={styles.wpPermalinkWrap}>
+            <strong>Permalink:</strong> {typeof window !== 'undefined' ? window.location.origin : ''}/blog/
+            {isEditingSlug ? (
+              <span className={styles.wpSlugEditBox}>
+                <input
+                  type="text"
+                  className={styles.wpSlugInput}
+                  value={slug}
+                  onChange={e => setSlug(slugify(e.target.value))}
+                  onBlur={() => setIsEditingSlug(false)}
+                  onKeyDown={e => e.key === "Enter" && setIsEditingSlug(false)}
+                  autoFocus
+                />
+                <button className={styles.wpButton} onClick={() => setIsEditingSlug(false)}>OK</button>
+              </span>
+            ) : (
+              <span className={styles.wpSlugValue}>
+                {slug}
+                <button className={styles.wpButton} onClick={() => setIsEditingSlug(true)}>Edit</button>
+              </span>
+            )}
           </div>
 
           <div className={styles.wpEditorWrap}>
