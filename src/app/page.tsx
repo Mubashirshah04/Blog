@@ -70,7 +70,7 @@ export default async function Home() {
         </section>
       ) : (
         <section className={styles.emptyHero}>
-          <h1>Welcome to Digital Info</h1>
+          <h1>Welcome to Shah Insights</h1>
           <p>No posts yet. <Link href="/admin/posts/new">Create your first post →</Link></p>
         </section>
       )}

@@ -22,7 +22,7 @@ export default function AdminDashboard() {
                 <li><span className={styles.wpIcon}>💬</span> <Link href="/admin/comments">892 Comments</Link></li>
               </ul>
               <p className={styles.wpGlanceFooter}>
-                Next.js Version 16.1.6 running MagTech Theme.
+                Next.js Version 16.1.6 running Shah Insights Theme.
               </p>
             </div>
           </div>

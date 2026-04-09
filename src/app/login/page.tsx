@@ -53,7 +53,7 @@ export default function LoginPage() {
       <div className={styles.loginBox}>
         <div className={styles.loginLogo}>
           <span className={styles.logoIcon}>⚡</span>
-          <h1 className={styles.logoText}>Digital Info</h1>
+          <h1 className={styles.logoText}>Shah Insights</h1>
           <p className={styles.logoSub}>Admin Panel</p>
         </div>
 
@@ -70,7 +70,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={styles.input}
-              placeholder="admin@example.com"
+              placeholder="admin@shahinsights.com"
               required
               autoComplete="email"
             />

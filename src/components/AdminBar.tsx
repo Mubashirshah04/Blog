@@ -42,7 +42,7 @@ export function AdminBar() {
           <div className={styles.adminBarItem}>
             <Link href="/admin" className={styles.adminBarLink}>
               <span className={styles.wpIcon}>⚡</span>
-              <span className={styles.siteName}>Digital Info</span>
+              <span className={styles.siteName}>Shah Insights</span>
             </Link>
             <div className={styles.subMenu}>
               <Link href="/admin" className={styles.subMenuItem}>Dashboard</Link>

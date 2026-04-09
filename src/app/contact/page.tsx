@@ -15,8 +15,8 @@ export default function ContactPage() {
             <span className={styles.icon}>✉️</span>
             <div>
               <h3>Email Us</h3>
-              <p>For general inquiries:<br /><strong>hello@magtech.example.com</strong></p>
-              <p>For press & partnerships:<br /><strong>partners@magtech.example.com</strong></p>
+              <p>For general inquiries:<br /><strong>hello@shahinsights.com</strong></p>
+              <p>For press & partnerships:<br /><strong>partners@shahinsights.com</strong></p>
             </div>
           </div>
 
@@ -24,7 +24,7 @@ export default function ContactPage() {
             <span className={styles.icon}>🏢</span>
             <div>
               <h3>Visit Us</h3>
-              <p><strong>MagTech Media HQ</strong><br />123 Innovation Drive<br />Silicon Valley, CA 94025<br />United States</p>
+              <p><strong>Shah Insights HQ</strong><br />Islamabad, Pakistan</p>
             </div>
           </div>
           
@@ -49,7 +49,7 @@ export default function ContactPage() {
             
             <div className={styles.formGroup}>
               <label htmlFor="email" className={styles.label}>Email Address</label>
-              <input type="email" id="email" className={styles.input} placeholder="john@example.com" required />
+              <input type="email" id="email" className={styles.input} placeholder="you@email.com" required />
             </div>
             
             <div className={styles.formGroup}>

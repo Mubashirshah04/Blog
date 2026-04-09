@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>About MagTech</h1>
+        <h1 className={styles.title}>About Shah Insights</h1>
         <p className={styles.subtitle}>Empowering the next generation of tech enthusiasts and builders.</p>
       </header>
       
@@ -17,7 +17,7 @@ export default function AboutPage() {
         <div className={styles.textBlock}>
           <h2 className={styles.sectionTitle}>Our Mission</h2>
           <p className={styles.text}>
-            Founded in 2024, MagTech is the premier destination for ambitious individuals who want to stay at the cutting edge of technology, finance, and online business. 
+            Founded in 2024, Shah Insights is the premier destination for ambitious individuals who want to stay at the cutting edge of technology, finance, and online business. 
           </p>
           <p className={styles.text}>
             We believe that the rapid advancement in Artificial Intelligence and blockchain technology isn't just changing how we work—it's changing how we live. Our team of expert writers, industry veterans, and researchers are dedicated to bringing you the most accurate, actionable, and insightful content on the web.

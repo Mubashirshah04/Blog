@@ -58,7 +58,7 @@ export function Navbar() {
       <div className={styles.container}>
         <div className={styles.logoAndNav}>
           <Link href="/" className={styles.logo}>
-            Digital<span className={styles.accent}>Info</span>
+            Shah<span className={styles.accent}>Insights</span>
           </Link>
 
           <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileOpen : ""}`} ref={dropdownRef}>

@@ -7,7 +7,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className={styles.wpAdminContainer}>
       <aside className={styles.wpSidebar}>
         <div className={styles.wpSidebarHeader}>
-          <h2 className={styles.wpSiteTitle}>MagTech <span className={styles.wpSiteIcon}>Dashboard</span></h2>
+          <h2 className={styles.wpSiteTitle}>Shah Insights <span className={styles.wpSiteIcon}>Dashboard</span></h2>
         </div>
         
         <nav className={styles.wpNav}>

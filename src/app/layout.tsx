@@ -7,9 +7,9 @@ import { AnalyticsTracker } from "../components/AnalyticsTracker";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Digital Info - Tech, AI, Crypto & Finance Blog",
+  title: "Shah Insights - Tech, AI, Crypto & Finance Blog",
   description: "The premium source for AI tools, crypto news, tech updates, finance tips and online earning. Stay ahead of the curve.",
-  keywords: "tech blog, ai tools, crypto news, finance, online earning, digital info",
+  keywords: "tech blog, ai tools, crypto news, finance, online earning, shah insights",
 };
 
 export default function RootLayout({

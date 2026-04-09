@@ -12,7 +12,7 @@ export function Footer() {
         <div className={styles.grid}>
           <div className={styles.col}>
             <Link href="/" className={styles.logo}>
-              Mag<span className={styles.accent}>Tech</span>
+              Shah<span className={styles.accent}>Insights</span>
             </Link>
             <p className={styles.description}>
               The ultimate source for modern tech news, crypto updates, and online earning strategies. Minimalist premium reading experience.
@@ -55,7 +55,7 @@ export function Footer() {
         
         <div className={styles.bottom}>
           <p className={styles.copyright}>
-            © {new Date().getFullYear()} MagTech. All rights reserved. Built with Next.js.
+            © {new Date().getFullYear()} Shah Insights. All rights reserved. Built with Next.js.
           </p>
           <div className={styles.social}>
             <Link href="#" className={styles.socialIcon} aria-label="Twitter">
