@@ -44,7 +44,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const { data: allPublished } = await supabase
     .from("posts")
-    .select("id, title, slug, created_at, category")
+    .select("id, title, slug, created_at, category, featured_image")
     .eq("status", "published")
     .limit(50);
   
