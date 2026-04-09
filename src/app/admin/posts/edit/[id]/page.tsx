@@ -322,6 +322,22 @@ export default function EditPostPage() {
     setTagInput("");
   };
 
+  const moveToTrash = async () => {
+    if (!confirm("Are you sure you want to move this post to trash?")) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("posts")
+      .update({ status: "trash" })
+      .eq("id", id);
+
+    if (error) {
+      setNotice(`❌ Error: ${error.message}`);
+      setSaving(false);
+      return;
+    }
+    router.push("/admin/posts");
+  };
+
   if (loading) return <div className={styles.wpWrap} style={{ padding: "2rem" }}>Loading post...</div>;
 
   const parentCats = categories.filter(c => !c.parent_id);
@@ -552,7 +568,9 @@ export default function EditPostPage() {
               </div>
             </div>
             <div className={styles.wpPublishFooter}>
-              <a href="#" className={styles.wpDeleteLink}>Move to Trash</a>
+              <button type="button" className={styles.wpDeleteLink} onClick={moveToTrash} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} disabled={saving}>
+                Move to Trash
+              </button>
               <button type="button" className={styles.wpButtonPrimary} onClick={() => updatePost("published")} disabled={saving}>
                 {saving ? "Updating..." : "Update Post"}
               </button>

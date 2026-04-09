@@ -557,3 +557,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+.wpStatusTrash {
+  background: #fcf0f1;
+  color: #d63638;
+  border: 1px solid #d63638;
+}
+
+.wpRowLoading {
+  opacity: 0.5;
+  pointer-events: none;
+}
