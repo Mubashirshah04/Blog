@@ -67,7 +67,7 @@ export function Navbar() {
       <div className={styles.container}>
         <div className={styles.logoAndNav}>
           <Link href="/" className={styles.logo}>
-            <img src="/logo.jpg" alt="Shah Insights Logo" className={styles.logoImg} />
+            <img src="/logo.png" alt="Shah Insights Logo" className={styles.logoImg} />
           </Link>
 
           <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileOpen : ""}`} ref={dropdownRef}>
