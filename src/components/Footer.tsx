@@ -43,7 +43,7 @@ export function Footer() {
         <div className={styles.grid}>
           <div className={styles.col}>
             <Link href="/" className={styles.logo}>
-              Shah<span className={styles.accent}>Insights</span>
+              <img src="/logo.jpg" alt="Shah Insights Logo" className={styles.logoImg} />
             </Link>
             <p className={styles.description}>
               The ultimate source for modern tech news, crypto updates, and online earning strategies. Minimalist premium reading experience.

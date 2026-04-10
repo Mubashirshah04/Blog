@@ -485,6 +485,32 @@
 .wpVisualEditor img {
   max-width: 100%;
   height: auto;
+  border-radius: 4px;
+  display: block;
+  margin: 10px auto;
+  transition: box-shadow 0.2s;
+}
+
+.wpVisualEditor img:global(.alignleft) {
+  float: left !important;
+  margin: 5px 15px 10px 0 !important;
+  max-width: 50% !important;
+  display: inline-block !important;
+}
+
+.wpVisualEditor img:global(.alignright) {
+  float: right !important;
+  margin: 5px 0 10px 15px !important;
+  max-width: 50% !important;
+  display: inline-block !important;
+}
+
+.wpVisualEditor img:global(.aligncenter) {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+  clear: both;
 }
 .wpVisualEditor hr {
   border: none;

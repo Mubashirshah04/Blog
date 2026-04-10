@@ -15,6 +15,35 @@ const turndownService = new TurndownService({
   bulletListMarker: "-",
 });
 
+// Preserve image alignment classes
+turndownService.addRule('img-align', {
+  filter: ['img'],
+  replacement: (content, node) => {
+    const img = node as HTMLImageElement;
+    const classes = img.getAttribute('class');
+    const src = img.getAttribute('src');
+    const alt = img.getAttribute('alt') || "";
+    const style = img.getAttribute('style');
+    const width = img.getAttribute('width');
+
+    if (classes || style || width) {
+      return `<img src="${src}" alt="${alt}" ${classes ? `class="${classes}"` : ""} ${style ? `style="${style}"` : ""} ${width ? `width="${width}"` : ""} />`;
+    }
+    return `![${alt}](${src})`;
+  }
+});
+
+// Preserve line breaks and gaps
+turndownService.addRule('keep-br', {
+  filter: ['br'],
+  replacement: () => '<br/>'
+});
+
+turndownService.addRule('keep-p-gap', {
+  filter: (node) => node.nodeName === 'P' && (node.innerHTML === '<br>' || node.innerHTML === '&nbsp;' || node.innerHTML === ''),
+  replacement: () => '\n\n<br/>\n\n'
+});
+
 type Category = { id: string; name: string; slug: string; parent_id: string | null };
 
 function slugify(text: string) {
@@ -159,7 +188,7 @@ export default function CreatePostPage() {
     } else {
       editorRef.current?.focus();
       const id = `img-${Date.now()}`;
-      document.execCommand("insertHTML", false, `<img id="${id}" src="${url}" class="wp-editor-image" style="max-width:100%; height:auto; border-radius:8px; margin: 20px 0; display:block; cursor:pointer;" />`);
+      document.execCommand("insertHTML", false, `<img id="${id}" src="${url}" class="wp-editor-image aligncenter" style="max-width:100%; height:auto;" />`);
       
       // Force update HTML tracking
       setTimeout(() => {
@@ -188,9 +217,22 @@ export default function CreatePostPage() {
     }
   };
 
-  const updateImageStyle = (style: Partial<CSSStyleDeclaration>) => {
+  const updateImageAlignment = (align: 'alignleft' | 'alignright' | 'aligncenter') => {
     if (!selectedImage) return;
-    Object.assign(selectedImage.style, style);
+    selectedImage.classList.remove('alignleft', 'alignright', 'aligncenter');
+    selectedImage.classList.add(align);
+    
+    // Clear margins that might have been set by the old system
+    selectedImage.style.marginLeft = '';
+    selectedImage.style.marginRight = '';
+    selectedImage.style.display = align === 'aligncenter' ? 'block' : '';
+    
+    setEditorHtml(editorRef.current?.innerHTML || "");
+  };
+
+  const updateImageWidth = (width: string) => {
+    if (!selectedImage) return;
+    selectedImage.style.width = width;
     setEditorHtml(editorRef.current?.innerHTML || "");
   };
 
@@ -437,14 +479,14 @@ export default function CreatePostPage() {
                   className={styles.wpImageToolbar}
                   style={{ top: imageToolbarPos.top, left: imageToolbarPos.left }}
                 >
-                  <button type="button" onClick={() => updateImageStyle({ width: '25%' })}>25%</button>
-                  <button type="button" onClick={() => updateImageStyle({ width: '50%' })}>50%</button>
-                  <button type="button" onClick={() => updateImageStyle({ width: '75%' })}>75%</button>
-                  <button type="button" onClick={() => updateImageStyle({ width: '100%' })}>100%</button>
+                  <button type="button" onClick={() => updateImageWidth('25%')}>25%</button>
+                  <button type="button" onClick={() => updateImageWidth('33%')}>33%</button>
+                  <button type="button" onClick={() => updateImageWidth('50%')}>50%</button>
+                  <button type="button" onClick={() => updateImageWidth('100%')}>100%</button>
                   <div className={styles.wpToolbarDivider} />
-                  <button type="button" onClick={() => updateImageStyle({ marginLeft: '0', marginRight: 'auto' })}>⬅</button>
-                  <button type="button" onClick={() => updateImageStyle({ marginLeft: 'auto', marginRight: 'auto' })}>≡</button>
-                  <button type="button" onClick={() => updateImageStyle({ marginLeft: 'auto', marginRight: '0' })}>➡</button>
+                  <button type="button" onClick={() => updateImageAlignment('alignleft')}>⬅</button>
+                  <button type="button" onClick={() => updateImageAlignment('aligncenter')}>≡</button>
+                  <button type="button" onClick={() => updateImageAlignment('alignright')}>➡</button>
                   <div className={styles.wpToolbarDivider} />
                   <button type="button" className={styles.wpDeleteBtn} onClick={removeImage}>🗑️</button>
                 </div>
