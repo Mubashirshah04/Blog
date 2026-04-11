@@ -8,12 +8,18 @@ import { AiDetector } from "@/components/AiDetector";
 import { MediaLibrary } from "@/components/MediaLibrary";
 import { marked } from "marked";
 import TurndownService from "turndown";
+import { gfm } from "turndown-plugin-gfm";
 
 const turndownService = new TurndownService({
   headingStyle: "atx",
   hr: "---",
   bulletListMarker: "-",
 });
+
+// Use GFM plugin for tables, task lists, etc.
+turndownService.use(gfm);
+
+// Preserve image alignment classes
 
 // Preserve image alignment classes
 turndownService.addRule('img-align', {
@@ -219,6 +225,62 @@ export default function EditPostPage() {
     setShowMediaLibrary(true);
   };
 
+  const insertTable = () => {
+    editorRef.current?.focus();
+    const sel = window.getSelection();
+    let tableHtml = "";
+
+    if (sel && sel.toString().trim().length > 0) {
+      // CONVERT SELECTION TO TABLE
+      const text = sel.toString().trim();
+      const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+      
+      tableHtml = `<table style="width:100%; border-collapse: collapse; margin: 20px 0;"><tbody>`;
+      
+      lines.forEach((line, index) => {
+        // Try to split by Tab, Double Space, or Pipe
+        let cells = line.split(/\t| {2,}|\|/).map(c => c.trim()).filter(Boolean);
+        
+        // If it didn't split, try single space if it looks like a list
+        if (cells.length === 1) {
+          cells = line.split(/ {2,}/).map(c => c.trim()).filter(Boolean);
+        }
+
+        tableHtml += `<tr style="${index === 0 ? "background: #f8fafc; font-weight: bold;" : ""}">`;
+        cells.forEach(cell => {
+          tableHtml += `<td style="padding: 12px; border: 1px solid #e2e8f0;">${cell}</td>`;
+        });
+        tableHtml += `</tr>`;
+      });
+      
+      tableHtml += `</tbody></table><p><br/></p>`;
+    } else {
+      // INSERT DEFAULT BLANK TABLE
+      tableHtml = `
+        <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+              <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Header 1</th>
+              <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Header 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e2e8f0;">Data</td>
+              <td style="padding: 12px; border: 1px solid #e2e8f0;">Data</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><br/></p>
+      `;
+    }
+
+    document.execCommand("insertHTML", false, tableHtml);
+    setTimeout(() => {
+      setEditorHtml(editorRef.current?.innerHTML || "");
+    }, 50);
+  };
+
   const handleMediaSelect = (url: string) => {
     if (mediaLibraryMode === "featured") {
       setFeaturedImage(url);
@@ -407,6 +469,9 @@ export default function EditPostPage() {
             <div className={styles.wpEditorTop}>
               <button type="button" className={styles.wpMediaBtn} onClick={insertImage}>
                 <span className={styles.wpMediaIcon}>📷</span> Add Media
+              </button>
+              <button type="button" className={styles.wpMediaBtn} onClick={insertTable} style={{ marginLeft: 5 }}>
+                <span className={styles.wpMediaIcon}>📊</span> Add Table
               </button>
               <div className={styles.wpEditorTabs}>
                 <button

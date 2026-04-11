@@ -217,6 +217,39 @@
 .prose-content strong { font-weight: 700; color: var(--text-main); }
 .prose-content em { font-style: italic; }
 
+.prose-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2.5rem 0;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.prose-content th {
+  background: var(--bg-surface-hover);
+  color: var(--text-main);
+  font-weight: 700;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.prose-content td {
+  padding: 12px 18px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.prose-content tr:nth-child(even) {
+  background: rgba(0,0,0,0.02);
+}
+
+[data-theme='dark'] .prose-content tr:nth-child(even) {
+  background: rgba(255,255,255,0.03);
+}
+
 .proseImageContainer {
   margin: 2.5rem -2rem;
   text-align: center;
