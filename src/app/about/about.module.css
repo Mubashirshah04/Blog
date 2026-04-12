@@ -1,94 +1,175 @@
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 6rem 1.5rem;
 }
 
-.header {
+.hero {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
+  position: relative;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--bg-surface-hover);
+  color: var(--primary-color);
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
 }
 
 .title {
-  font-size: 3.5rem;
-  font-weight: 800;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 900;
   color: var(--text-main);
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: var(--text-muted);
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 8rem;
 }
 
-.imageBlock {
-  width: 100%;
+.imageWrapper {
+  position: relative;
 }
 
 .image {
   width: 100%;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.12);
 }
 
-.textBlock {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  padding: 3rem;
-  border-radius: var(--radius-lg);
+.imageDecoration {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  background: var(--primary-color);
+  z-index: -1;
+  border-radius: 24px;
+  opacity: 0.1;
 }
 
 .sectionTitle {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
   color: var(--text-main);
   margin-bottom: 1.5rem;
-  margin-top: 2rem;
-}
-
-.sectionTitle:first-child {
-  margin-top: 0;
+  letter-spacing: -0.02em;
 }
 
 .text {
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   color: var(--text-muted);
   line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.valueCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-color);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.valueIcon {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.valueTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.valueText {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.ctaSection {
+  text-align: center;
+  background: var(--bg-surface-hover);
+  padding: 5rem 2rem;
+  border-radius: 32px;
+  margin-top: 4rem;
+}
+
+.ctaTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
   margin-bottom: 1.5rem;
 }
 
-.list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.ctaButton {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #fff;
+  padding: 16px 40px;
+  border-radius: 99px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.list li {
-  font-size: 1.125rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-  padding-left: 1.5rem;
-  position: relative;
+.ctaButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
 }
 
-.list li::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: var(--primary-color);
-  font-weight: bold;
-}
-
-.list strong {
-  color: var(--text-main);
+@media (max-width: 968px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .image {
+    aspect-ratio: 16/9;
+  }
 }
