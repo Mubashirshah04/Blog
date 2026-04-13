@@ -31,14 +31,12 @@ export function Navbar() {
 
       if (!data) return;
 
-      // Filter out specific categories for header
-      const filteredData = data.filter(c => {
-        const slug = c.slug.toLowerCase();
-        const name = c.name.toLowerCase();
-        return !['internet', 'gadgets'].includes(slug) && 
-               !slug.includes('upcoming') && 
-               !name.includes('upcoming');
-      });
+      // Hardcoded manual override for focused categories
+      const focusSlugs = ['online-earning', 'ai-tools', 'mobile-apps'];
+      const filteredData = data.filter(c => 
+        focusSlugs.includes(c.slug.toLowerCase()) || 
+        (c.parent_id && data.find(p => p.id === c.parent_id && focusSlugs.includes(p.slug.toLowerCase())))
+      );
 
       // Build parent -> children tree
       const parents = filteredData.filter(c => !c.parent_id);

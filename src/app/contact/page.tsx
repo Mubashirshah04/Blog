@@ -15,8 +15,8 @@ export default function ContactPage() {
             <span className={styles.icon}>✉️</span>
             <div>
               <h3>Email Us</h3>
-              <p>For general inquiries:<br /><strong>hello@shahinsights.com</strong></p>
-              <p>For press & partnerships:<br /><strong>partners@shahinsights.com</strong></p>
+              <p>For inquiries, partnerships, or support:</p>
+              <p><strong>mubashirshah4112@gmail.com</strong></p>
             </div>
           </div>
 

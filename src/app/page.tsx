@@ -105,7 +105,7 @@ export default async function Home() {
             <div className={styles.categoriesWidget}>
               <h3 className={styles.widgetTitle}>Browse by Category</h3>
               <div className={styles.categoryTags}>
-                {["AI Tools", "Finance", "Crypto", "Tech News", "Mobile Apps", "Online Earning", "Cricket News"].map(cat => (
+                {["Online Earning", "AI Tools", "Mobile Apps"].map(cat => (
                   <Link
                     href={`/category/${cat.toLowerCase().replace(/ /g, "-")}`}
                     key={cat}

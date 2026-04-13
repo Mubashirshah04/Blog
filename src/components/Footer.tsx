@@ -23,14 +23,8 @@ export function Footer() {
         .order("sort_order", { ascending: true });
 
       if (data) {
-        // Show ONLY internet, gadgets, or upcoming in footer categories
-        const filtered = data.filter(c => {
-          const slug = c.slug.toLowerCase();
-          const name = c.name.toLowerCase();
-          return ['internet', 'gadgets'].includes(slug) || 
-                 slug.includes('upcoming') || 
-                 name.includes('upcoming');
-        });
+        const focusSlugs = ['online-earning', 'ai-tools', 'mobile-apps'];
+        const filtered = data.filter(c => focusSlugs.includes(c.slug.toLowerCase()));
         setFooterCats(filtered);
       }
     };
@@ -63,8 +57,8 @@ export function Footer() {
                 ))
               ) : (
                 <>
-                  <li><Link href="/category/internet" className={styles.link}>Internet</Link></li>
-                  <li><Link href="/category/gadgets" className={styles.link}>Gadgets</Link></li>
+                  <li><Link href="/category/online-earning" className={styles.link}>Online Earning</Link></li>
+                  <li><Link href="/category/ai-tools" className={styles.link}>AI Tools</Link></li>
                 </>
               )}
             </ul>
@@ -83,10 +77,11 @@ export function Footer() {
           <div className={styles.col}>
             <h3 className={styles.heading}>Legal</h3>
             <ul className={styles.list}>
-              <li><Link href="/about" className={styles.link}>About Us</Link></li>
-              <li><Link href="/contact" className={styles.link}>Contact</Link></li>
               <li><Link href="/privacy" className={styles.link}>Privacy Policy</Link></li>
               <li><Link href="/terms" className={styles.link}>Terms & Conditions</Link></li>
+              <li><Link href="/disclaimer" className={styles.link}>Disclaimer</Link></li>
+              <li><Link href="/about" className={styles.link}>About Us</Link></li>
+              <li><Link href="/contact" className={styles.link}>Contact</Link></li>
             </ul>
           </div>
         </div>
