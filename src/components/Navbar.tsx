@@ -1,4 +1,4 @@
-"use client";
+"use client"; // AdSense Optimized Focus
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
